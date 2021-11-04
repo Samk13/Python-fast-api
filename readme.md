@@ -11,3 +11,9 @@ venv/Scripts/activate.bat
 mac:
 source venv/Script/activate
 ```
+
+start the Server:
+
+```zsh
+uvicorn main:app --reload
+```

@@ -9,7 +9,7 @@ run:
 venv/Scripts/activate.bat
 
 mac:
-source venv/Script/activate
+    source venv/Script/activate
 ```
 
 start the Server:

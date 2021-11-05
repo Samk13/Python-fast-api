@@ -12,6 +12,17 @@ mac:
     source venv/Script/activate
 ```
 
+to deactivate the venv:
+deactivate
+
+---
+
+If you get errors with pip:
+
+```bash
+python -m ensurepip
+```
+
 start the Server:
 
 ```zsh

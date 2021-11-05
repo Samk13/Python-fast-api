@@ -19,15 +19,15 @@ my_posts = [
         "content": "This is my first post",
         "published": True,
         "rating": 5,
-        "id": 123
+        "id": 123,
     },
     {
         "title": "Second post",
         "content": "This is my second post",
         "published": False,
         "rating": 4,
-        "id": 456
-    }
+        "id": 456,
+    },
 ]
 
 

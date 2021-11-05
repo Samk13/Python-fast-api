@@ -60,7 +60,5 @@ def create_posts(post: Post):
 
 @app.get("/posts/{post_id}")
 def get_post(post_id: int):
-    if find_post(post_id) != None:
-        return {"data": find_post(post_id)}
-    else:
-        return {"message": "Post not found"}
+    result = find_post(post_id)
+    return {"data": result} if result else {"message": "Post not found"}

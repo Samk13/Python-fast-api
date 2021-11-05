@@ -42,6 +42,6 @@ def get_posts():
 
 
 @app.post("/posts")
-def create_posts(new_post: Post):
+def create_posts(post: Post):
 
-    return {"data": new_post.dict()}
+    return {"data": post}

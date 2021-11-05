@@ -17,7 +17,8 @@ deactivate
 
 ---
 
-If you get errors with pip:
+If you get errors with pip not found:
+solution:
 
 ```bash
 python -m ensurepip

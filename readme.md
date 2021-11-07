@@ -27,5 +27,5 @@ python -m ensurepip
 start the Server:
 
 ```zsh
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```

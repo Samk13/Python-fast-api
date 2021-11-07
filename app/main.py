@@ -77,17 +77,34 @@ def get_post(post_id: int, response: Response):
                 print("* ", end="")
             print("")
         return {"data": result}
+
+
 # Delete post
-
-
 @app.delete("/posts/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(post_id: int, response: Response):
     result = find_post(post_id)
     if not result:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Post id {post_id} not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
         )
     else:
         my_posts.remove(result)
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
+        return {"message": f"Post '{result['title']}' deleted successfully"}
+        # return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.put("/posts/{post_id}", status_code=status.HTTP_202_ACCEPTED)
+def update_post(post_id: int, post: Post):
+    post_dict = post.dict()
+    post_update = find_post(post_id)
+    if not post_update:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
+        )
+    else:
+        for key in post_update:
+            if key not in post_dict:
+                post_dict[key] = post_update[key]
+            post_update[key] = post_dict[key]
+
+        return {"data": post_update}

@@ -72,6 +72,10 @@ def get_post(post_id: int, response: Response):
             headers={"X-Error": "Post not found"},
         )
     else:
+        for i in range(5):
+            for j in range(i):
+                print("* ", end="")
+            print("")
         return {"data": result}
 # Delete post
 

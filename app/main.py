@@ -3,33 +3,39 @@ from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
 from random import randrange
+from psycopg2 import connect
+from psycopg2.extras import RealDictCursor
+import time
 
 app = FastAPI()
+
+while True:
+    try:
+        # TODO: move to config
+        conn = connect(
+            database="fast-api",
+            user="admin",
+            password="admin",
+            host="localhost",
+            port="5432",
+            cursor_factory=RealDictCursor
+        )
+        cur = conn.cursor()
+        print("✨🎉Connected to database succsesfully ✨🎉")
+
+        cur.execute("SELECT * FROM posts")
+        my_posts = cur.fetchall()
+        break
+    except Exception as e:
+        print("😐 Error:", e)
+        print("Trying to connect to database again in 5 seconds...")
+        time.sleep(5)
 
 
 class Post(BaseModel):
     title: str
     content: str
     published: bool = True
-    rating: Optional[int] = None
-
-
-my_posts = [
-    {
-        "title": "First post",
-        "content": "This is my first post",
-        "published": True,
-        "rating": 5,
-        "id": 123,
-    },
-    {
-        "title": "Second post",
-        "content": "This is my second post",
-        "published": False,
-        "rating": 4,
-        "id": 456,
-    },
-]
 
 
 def find_post(id):
@@ -39,10 +45,6 @@ def find_post(id):
     return None
 
 
-def error_message(message):
-    return {"message": message}
-
-
 @app.get("/")
 async def root():
     return {"message": "Hello World is it working?"}
@@ -50,7 +52,9 @@ async def root():
 
 @app.get("/posts")
 def get_posts():
-    return {"data": my_posts}
+    cur.execute("""SELECT * FROM posts""")
+    posts = cur.fetchall()
+    return {"data": posts}
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)

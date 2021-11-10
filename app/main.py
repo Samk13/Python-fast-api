@@ -59,56 +59,64 @@ def get_posts():
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
 def create_posts(post: Post):
-    post_dict = post.dict()
-    post_dict["id"] = randrange(10000000, 99999999)
-    my_posts.append(post_dict)
-
-    return {"data": post_dict}
+    cur.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING *""",
+                (post.title, post.content, post.published))
+    new_post = cur.fetchone()
+    conn.commit()
+    return {"data": new_post}
 
 
 @app.get("/posts/{post_id}")
 def get_post(post_id: int, response: Response):
-    result = find_post(post_id)
-    if not result:
+    # keep the comma after str(post_id) to avoid syntax error
+    cur.execute("""SELECT * FROM posts WHERE id = %s """, (str(post_id),))
+    post = cur.fetchone()
+    if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Post id {post_id} not found",
-            headers={"X-Error": "Post not found"},
+            detail=f"Post id {post_id} not found"
         )
-    else:
-        for i in range(5):
-            for j in range(i):
-                print("* ", end="")
-            print("")
-        return {"data": result}
+    return {"data": post}
 
 
 # Delete post
 @app.delete("/posts/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(post_id: int, response: Response):
-    result = find_post(post_id)
-    if not result:
+    cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""",
+                (str(post_id),))
+    deleted_post = cur.fetchone()
+    conn.commit()
+    if not deleted_post:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Post id {post_id} not found"
         )
-    else:
-        my_posts.remove(result)
-        return {"message": f"Post '{result['title']}' deleted successfully"}
-        # return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return {"message": f"Post '{deleted_post['title']}' deleted successfully"}
 
 
 @app.put("/posts/{post_id}", status_code=status.HTTP_202_ACCEPTED)
 def update_post(post_id: int, post: Post):
-    post_dict = post.dict()
-    post_update = find_post(post_id)
-    if not post_update:
+    cur.execute("""UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s RETURNING *""",
+                (post.title, post.content, post.published, str(post_id),))
+    updated_post = cur.fetchone()
+    conn.commit()
+    if not updated_post:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Post id {post_id} not found"
         )
-    else:
-        for key in post_update:
-            if key not in post_dict:
-                post_dict[key] = post_update[key]
-            post_update[key] = post_dict[key]
+    return {"data": updated_post}
 
-        return {"data": post_update}
+    # post_dict = post.dict()
+    # post_update = find_post(post_id)
+    # if not post_update:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
+    #     )
+    # else:
+    #     for key in post_update:
+    #         if key not in post_dict:
+    #             post_dict[key] = post_update[key]
+    #         post_update[key] = post_dict[key]
+
+    #     return {"data": post_update}

@@ -22,7 +22,7 @@ while True:
             password="admin",
             host="localhost",
             port="5432",
-            cursor_factory=RealDictCursor
+            cursor_factory=RealDictCursor,
         )
         cur = conn.cursor()
         print("✨🎉Connected to database succsesfully ✨🎉")
@@ -63,8 +63,10 @@ def get_posts():
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
 def create_posts(post: Post):
-    cur.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING *""",
-                (post.title, post.content, post.published))
+    cur.execute(
+        """INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING *""",
+        (post.title, post.content, post.published),
+    )
     new_post = cur.fetchone()
     conn.commit()
     return {"data": new_post}
@@ -77,8 +79,7 @@ def get_post(post_id: int, response: Response):
     post = cur.fetchone()
     if not post:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Post id {post_id} not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
         )
     return {"data": post}
 
@@ -86,28 +87,32 @@ def get_post(post_id: int, response: Response):
 # Delete post
 @app.delete("/posts/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(post_id: int, response: Response):
-    cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""",
-                (str(post_id),))
+    cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""", (str(post_id),))
     deleted_post = cur.fetchone()
     conn.commit()
     if not deleted_post:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Post id {post_id} not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
         )
     return {"message": f"Post '{deleted_post['title']}' deleted successfully"}
 
 
 @app.put("/posts/{post_id}", status_code=status.HTTP_202_ACCEPTED)
 def update_post(post_id: int, post: Post):
-    cur.execute("""UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s RETURNING *""",
-                (post.title, post.content, post.published, str(post_id),))
+    cur.execute(
+        """UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s RETURNING *""",
+        (
+            post.title,
+            post.content,
+            post.published,
+            str(post_id),
+        ),
+    )
     updated_post = cur.fetchone()
     conn.commit()
     if not updated_post:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Post id {post_id} not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
         )
     return {"data": updated_post}
 

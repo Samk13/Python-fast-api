@@ -17,15 +17,15 @@ while True:
     try:
         # TODO: move to config
         conn = connect(
-            database="fast-api",
-            user="admin",
+            database="postgres",
+            user="postgres",
             password="admin",
             host="localhost",
             port="5432",
             cursor_factory=RealDictCursor,
         )
         cur = conn.cursor()
-        print("✨🎉Connected to database succsesfully ✨🎉")
+        print("✨🎉Connected to database successfully ✨🎉")
 
         cur.execute("SELECT * FROM posts")
         my_posts = cur.fetchall()
@@ -87,7 +87,8 @@ def get_post(post_id: int, response: Response):
 # Delete post
 @app.delete("/posts/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(post_id: int, response: Response):
-    cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""", (str(post_id),))
+    cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""",
+                (str(post_id),))
     deleted_post = cur.fetchone()
     conn.commit()
     if not deleted_post:

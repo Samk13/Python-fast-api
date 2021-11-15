@@ -6,12 +6,15 @@ from random import randrange
 from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
 import time
-from . import models
+from . import models, schemas
 from sqlalchemy.orm import Session
 from .database import engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
+Post = schemas.Post
+CreatePost = schemas.CreatePost
+UpdatePost = schemas.PostUpdate
 
 while True:
     try:
@@ -36,12 +39,6 @@ while True:
         time.sleep(5)
 
 
-class Post(BaseModel):
-    title: str
-    content: str
-    published: bool = True
-
-
 def find_post(id):
     for post in my_posts:
         if int(post["id"]) == int(id):
@@ -54,12 +51,6 @@ async def root():
     return {"message": "Hello World is it working?"}
 
 
-@app.get("/test")
-def test(db: Session = Depends(get_db)):
-    posts = db.query(models.Post).all()
-    return {"data": posts}
-
-
 @app.get("/posts")
 def get_posts(db: Session = Depends(get_db)):
     # SQL way of doing it
@@ -70,7 +61,7 @@ def get_posts(db: Session = Depends(get_db)):
 
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_posts(post: Post, db: Session = Depends(get_db)):
+def create_posts(post: CreatePost, db: Session = Depends(get_db)):
     # SQL way of doing it
     # cur.execute(
     #     """INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING *""",
@@ -108,7 +99,8 @@ def delete_post(post_id: int, db: Session = Depends(get_db)):
     #             (str(post_id),))
     # deleted_post = cur.fetchone()
     # conn.commit()
-    deleted_post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    deleted_post = db.query(models.Post).filter(
+        models.Post.id == post_id).first()
     if not deleted_post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
@@ -119,7 +111,7 @@ def delete_post(post_id: int, db: Session = Depends(get_db)):
 
 
 @app.put("/posts/{post_id}", status_code=status.HTTP_202_ACCEPTED)
-def update_post(post_id: int, post: Post, db: Session = Depends(get_db)):
+def update_post(post_id: int, post: UpdatePost, db: Session = Depends(get_db)):
     # SQL way of doing it
     # cur.execute(
     #     """UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s RETURNING *""",
@@ -132,7 +124,8 @@ def update_post(post_id: int, post: Post, db: Session = Depends(get_db)):
     # )
     # updated_post = cur.fetchone()
     # conn.commit()
-    updated_post_query = db.query(models.Post).filter(models.Post.id == post_id)
+    updated_post_query = db.query(
+        models.Post).filter(models.Post.id == post_id)
     updated_post = updated_post_query.first()
     if not updated_post:
         raise HTTPException(

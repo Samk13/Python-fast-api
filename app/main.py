@@ -108,8 +108,7 @@ def delete_post(post_id: int, db: Session = Depends(get_db)):
     #             (str(post_id),))
     # deleted_post = cur.fetchone()
     # conn.commit()
-    deleted_post = db.query(models.Post).filter(
-        models.Post.id == post_id).first()
+    deleted_post = db.query(models.Post).filter(models.Post.id == post_id).first()
     if not deleted_post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
@@ -133,8 +132,7 @@ def update_post(post_id: int, post: Post, db: Session = Depends(get_db)):
     # )
     # updated_post = cur.fetchone()
     # conn.commit()
-    updated_post_query = db.query(models.Post).filter(
-        models.Post.id == post_id)
+    updated_post_query = db.query(models.Post).filter(models.Post.id == post_id)
     updated_post = updated_post_query.first()
     if not updated_post:
         raise HTTPException(

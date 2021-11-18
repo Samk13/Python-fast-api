@@ -29,3 +29,11 @@ start the Server:
 ```zsh
 uvicorn app.main:app --reload
 ```
+
+to remove the **pycache** folder:
+[link](http://www.randallkent.com/2010/04/30/gitignore-not-working/)
+[github](https://github.com/martinohanlon/flightlight/issues/1)
+
+```zsh
+git rm -r --cached . && git add . && git commit -m "fixing .gitignore"
+```

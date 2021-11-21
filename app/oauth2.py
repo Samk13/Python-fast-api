@@ -4,15 +4,14 @@ from . import schemas, database, models
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+from .config import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-# SECRET_KEY
-# Algorithm used to sign the token
-# expire time
 
-SECRET_KEY = "13dfsdsdfd0fasdldfgjaloksjdfgdfaslöjfalksdhfalihksasldkfhjasl"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = settings.secret_key
+ALGORITHM = settings.algorithm
+# cause type is checheck is handeled with pydantic in the config.py file no need to convert it to int
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
 
 
 def create_access_token(data: dict):
@@ -43,5 +42,6 @@ def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
     token = verify_access_token(token, credentials_exception)
-    user = db.query(models.User).filter(models.User.id == token.user_id).first()
+    user = db.query(models.User).filter(
+        models.User.id == token.user_id).first()
     return user

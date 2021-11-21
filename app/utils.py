@@ -12,3 +12,7 @@ def find_post(id):
         if int(post["id"]) == int(id):
             return post
     return None
+
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)

@@ -4,7 +4,7 @@ from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
 from . import models, schemas
 from .database import engine
-from .routers import post, user
+from .routers import post, user, auth
 
 # init app
 app = FastAPI()
@@ -37,6 +37,7 @@ while True:
 # add routers
 app.include_router(post.router)
 app.include_router(user.router)
+app.include_router(auth.router)
 
 
 # test endpoint

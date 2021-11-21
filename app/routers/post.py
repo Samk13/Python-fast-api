@@ -1,7 +1,7 @@
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from ..database import get_db
-from .. import models, schemas
+from .. import models, schemas, oauth2
 from typing import List
 
 router = APIRouter(prefix="/posts", tags=["posts"])
@@ -12,7 +12,9 @@ UpdatePost = schemas.PostUpdate
 
 
 @router.get("/", response_model=List[Res])
-def get_posts(db: Session = Depends(get_db)):
+def get_posts(
+    db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)
+):
     # SQL way of doing it
     # cur.execute("""SELECT * FROM posts""")
     # posts = cur.fetchall()
@@ -21,7 +23,11 @@ def get_posts(db: Session = Depends(get_db)):
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=Res)
-def create_posts(post: CreatePost, db: Session = Depends(get_db)):
+def create_posts(
+    post: CreatePost,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(oauth2.get_current_user),
+):
     # SQL way of doing it
     # cur.execute(
     #     """INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING *""",
@@ -37,7 +43,11 @@ def create_posts(post: CreatePost, db: Session = Depends(get_db)):
 
 
 @router.get("/{post_id}", response_model=Res)
-def get_post(post_id: int, db: Session = Depends(get_db)):
+def get_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(oauth2.get_current_user),
+):
     # SQL way of doing it
     # keep the comma after str(post_id) to avoid syntax error
     # cur.execute("""SELECT * FROM posts WHERE id = %s """, (str(post_id),))
@@ -53,7 +63,11 @@ def get_post(post_id: int, db: Session = Depends(get_db)):
 
 # Delete post
 @router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(post_id: int, db: Session = Depends(get_db)):
+def delete_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(oauth2.get_current_user),
+):
     # SQL way of doing it
     # cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""",
     #             (str(post_id),))
@@ -70,10 +84,13 @@ def delete_post(post_id: int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put(
-    "/{post_id}", status_code=status.HTTP_202_ACCEPTED, response_model=Res
-)
-def update_post(post_id: int, post: UpdatePost, db: Session = Depends(get_db)):
+@router.put("/{post_id}", status_code=status.HTTP_202_ACCEPTED, response_model=Res)
+def update_post(
+    post_id: int,
+    post: UpdatePost,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(oauth2.get_current_user),
+):
     # SQL way of doing it
     # cur.execute(
     #     """UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s RETURNING *""",

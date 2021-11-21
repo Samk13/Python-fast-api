@@ -21,12 +21,19 @@ def get_posts(
     # SQL way of doing it
     # cur.execute("""SELECT * FROM posts""")
     # posts = cur.fetchall()
-    posts = db.query(models.Post).filter(
-        models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    posts = (
+        db.query(models.Post)
+        .filter(models.Post.title.contains(search))
+        .limit(limit)
+        .offset(skip)
+        .all()
+    )
     return posts
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse)
+@router.post(
+    "/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse
+)
 def create_posts(
     post: CreatePost,
     db: Session = Depends(get_db),
@@ -65,7 +72,8 @@ def get_post(
         )
     if post.owner_id != current_user.id:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform  requested action"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to perform  requested action",
         )
     return post
 
@@ -82,22 +90,26 @@ def delete_post(
     #             (str(post_id),))
     # deleted_post = cur.fetchone()
     # conn.commit()
-    deleted_post = db.query(models.Post).filter(
-        models.Post.id == post_id).first()
+    deleted_post = db.query(models.Post).filter(models.Post.id == post_id).first()
     if not deleted_post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
         )
     if deleted_post.owner_id != current_user.id:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform  requested action"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to perform  requested action",
         )
     db.delete(deleted_post)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/{post_id}", status_code=status.HTTP_202_ACCEPTED, response_model=schemas.PostResponse)
+@router.put(
+    "/{post_id}",
+    status_code=status.HTTP_202_ACCEPTED,
+    response_model=schemas.PostResponse,
+)
 def update_post(
     post_id: int,
     post: UpdatePost,
@@ -116,8 +128,7 @@ def update_post(
     # )
     # updated_post = cur.fetchone()
     # conn.commit()
-    updated_post_query = db.query(
-        models.Post).filter(models.Post.id == post_id)
+    updated_post_query = db.query(models.Post).filter(models.Post.id == post_id)
     updated_post = updated_post_query.first()
     if not updated_post:
         raise HTTPException(
@@ -125,7 +136,8 @@ def update_post(
         )
     if updated_post.owner_id != current_user.id:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform  requested action"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to perform  requested action",
         )
     updated_post_query.update(post.dict(), synchronize_session=False)
     db.commit()

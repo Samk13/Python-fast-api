@@ -29,6 +29,7 @@ class UserResponse(BaseModel):
     class Config:
         orm_mode = True
 
+
 # Response Schema is resposible for what keys are returned to the client
 
 

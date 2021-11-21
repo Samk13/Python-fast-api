@@ -5,13 +5,12 @@ from .. import models, schemas, oauth2
 from typing import List
 
 router = APIRouter(prefix="/posts", tags=["posts"])
-Res = schemas.PostResponse
 Post = schemas.Post
 CreatePost = schemas.CreatePost
 UpdatePost = schemas.PostUpdate
 
 
-@router.get("/", response_model=List[Res])
+@router.get("/", response_model=List[schemas.PostResponse])
 def get_posts(
     db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)
 ):
@@ -22,7 +21,7 @@ def get_posts(
     return posts
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=Res)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostResponse)
 def create_posts(
     post: CreatePost,
     db: Session = Depends(get_db),
@@ -43,7 +42,7 @@ def create_posts(
     return new_post
 
 
-@router.get("/{post_id}", response_model=Res)
+@router.get("/{post_id}", response_model=schemas.PostResponse)
 def get_post(
     post_id: int,
     db: Session = Depends(get_db),
@@ -93,7 +92,7 @@ def delete_post(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/{post_id}", status_code=status.HTTP_202_ACCEPTED, response_model=Res)
+@router.put("/{post_id}", status_code=status.HTTP_202_ACCEPTED, response_model=schemas.PostResponse)
 def update_post(
     post_id: int,
     post: UpdatePost,

@@ -13,7 +13,7 @@ UpdatePost = schemas.PostUpdate
 
 @router.get("/", response_model=List[Res])
 def get_posts(
-    db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)
+    db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)
 ):
     # SQL way of doing it
     # cur.execute("""SELECT * FROM posts""")
@@ -26,7 +26,7 @@ def get_posts(
 def create_posts(
     post: CreatePost,
     db: Session = Depends(get_db),
-    user_id: int = Depends(oauth2.get_current_user),
+    current_user: int = Depends(oauth2.get_current_user),
 ):
     # SQL way of doing it
     # cur.execute(
@@ -46,7 +46,7 @@ def create_posts(
 def get_post(
     post_id: int,
     db: Session = Depends(get_db),
-    user_id: int = Depends(oauth2.get_current_user),
+    current_user: int = Depends(oauth2.get_current_user),
 ):
     # SQL way of doing it
     # keep the comma after str(post_id) to avoid syntax error
@@ -66,14 +66,15 @@ def get_post(
 def delete_post(
     post_id: int,
     db: Session = Depends(get_db),
-    user_id: int = Depends(oauth2.get_current_user),
+    current_user: int = Depends(oauth2.get_current_user),
 ):
     # SQL way of doing it
     # cur.execute("""DELETE FROM posts WHERE id = %s RETURNING *""",
     #             (str(post_id),))
     # deleted_post = cur.fetchone()
     # conn.commit()
-    deleted_post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    deleted_post = db.query(models.Post).filter(
+        models.Post.id == post_id).first()
     if not deleted_post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
@@ -88,7 +89,7 @@ def update_post(
     post_id: int,
     post: UpdatePost,
     db: Session = Depends(get_db),
-    user_id: int = Depends(oauth2.get_current_user),
+    current_user: int = Depends(oauth2.get_current_user),
 ):
     # SQL way of doing it
     # cur.execute(
@@ -102,7 +103,8 @@ def update_post(
     # )
     # updated_post = cur.fetchone()
     # conn.commit()
-    updated_post_query = db.query(models.Post).filter(models.Post.id == post_id)
+    updated_post_query = db.query(
+        models.Post).filter(models.Post.id == post_id)
     updated_post = updated_post_query.first()
     if not updated_post:
         raise HTTPException(

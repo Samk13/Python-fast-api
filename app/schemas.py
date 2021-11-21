@@ -25,6 +25,7 @@ class PostUpdate(PostBase):
 class PostResponse(PostBase):
     id: int
     created_at: datetime
+    owner_id: int
     # add this config class to make SQLkalchemy convert the model to a dict or you will get an error
 
     class Config:

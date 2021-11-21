@@ -36,6 +36,7 @@ def create_posts(
     # new_post = cur.fetchone()
     # conn.commit()
     new_post = models.Post(**post.dict())
+    new_post.owner_id = current_user.id
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
@@ -58,6 +59,10 @@ def get_post(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
         )
+    if post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform  requested action"
+        )
     return post
 
 
@@ -78,6 +83,10 @@ def delete_post(
     if not deleted_post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
+        )
+    if deleted_post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform  requested action"
         )
     db.delete(deleted_post)
     db.commit()
@@ -109,6 +118,10 @@ def update_post(
     if not updated_post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
+        )
+    if updated_post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform  requested action"
         )
     updated_post_query.update(post.dict(), synchronize_session=False)
     db.commit()

@@ -1,5 +1,6 @@
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from ..database import get_db
 from .. import models, schemas, oauth2
 from typing import List, Optional
@@ -10,10 +11,9 @@ CreatePost = schemas.CreatePost
 UpdatePost = schemas.PostUpdate
 
 
-@router.get("/", response_model=List[schemas.PostResponse])
+@router.get("/", response_model=List[schemas.PostResponseVotes])
 def get_posts(
     db: Session = Depends(get_db),
-    current_user: int = Depends(oauth2.get_current_user),
     limit: int = 10,
     skip: int = 0,
     search: Optional[str] = "",
@@ -21,8 +21,19 @@ def get_posts(
     # SQL way of doing it
     # cur.execute("""SELECT * FROM posts""")
     # posts = cur.fetchall()
+    # https://youtu.be/0sOvCWFmrtA?t=37238 - explanation of the query
     posts = (
-        db.query(models.Post)
+        db.query(
+            models.Post,
+            func.count(models.Vote.post_id)
+            .label("votes")
+        )
+        .join(
+            models.Vote,
+            models.Vote.post_id == models.Post.id,
+            isouter=True
+        )
+        .group_by(models.Post.id)
         .filter(models.Post.title.contains(search))
         .limit(limit)
         .offset(skip)
@@ -54,7 +65,8 @@ def create_posts(
     return new_post
 
 
-@router.get("/{post_id}", response_model=schemas.PostResponse)
+# @router.get("/{post_id}")
+@router.get("/{post_id}", response_model=schemas.PostResponseVotes)
 def get_post(
     post_id: int,
     db: Session = Depends(get_db),
@@ -65,12 +77,42 @@ def get_post(
     # cur.execute("""SELECT * FROM posts WHERE id = %s """, (str(post_id),))
     # post = cur.fetchone()
 
-    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    # post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    post = (
+        db.query(
+            models.Post,
+            func.count(models.Vote.post_id)
+            .label("votes")
+        )
+        .join(
+            models.Vote,
+            models.Vote.post_id == models.Post.id,
+            isouter=True
+        )
+        .group_by(models.Post.id)
+        .filter(models.Post.id == post_id)
+        .first()
+    )
+    # post = (
+    #     db.query(
+    #         models.Post,
+    #         func.count(models.Vote.post_id)
+    #         .label("votes")
+    #     )
+    #     .join(
+    #         models.Vote,
+    #         models.Vote.post_id == models.Post.id,
+    #         isouter=True
+    #     )
+    #     .group_by(models.Post.id)
+    #     .filter(models.Post.id == post_id)
+    #     .first()
+    # )
     if not post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
         )
-    if post.owner_id != current_user.id:
+    if post.Post.owner_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to perform  requested action",
@@ -90,7 +132,8 @@ def delete_post(
     #             (str(post_id),))
     # deleted_post = cur.fetchone()
     # conn.commit()
-    deleted_post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    deleted_post = db.query(models.Post).filter(
+        models.Post.id == post_id).first()
     if not deleted_post:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Post id {post_id} not found"
@@ -128,7 +171,8 @@ def update_post(
     # )
     # updated_post = cur.fetchone()
     # conn.commit()
-    updated_post_query = db.query(models.Post).filter(models.Post.id == post_id)
+    updated_post_query = db.query(
+        models.Post).filter(models.Post.id == post_id)
     updated_post = updated_post_query.first()
     if not updated_post:
         raise HTTPException(

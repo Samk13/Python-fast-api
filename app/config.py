@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int
-# specifiy where the env file is located
+    # specifiy where the env file is located
 
     class Config:
         env_file = ".env"

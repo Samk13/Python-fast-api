@@ -1,13 +1,11 @@
 from .database import Base
 from sqlalchemy import (
     ForeignKey,
-    DateTime,
     Integer,
     Boolean,
     Column,
     String,
     func,
-    Text,
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text

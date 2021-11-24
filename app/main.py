@@ -6,7 +6,8 @@ from . import models
 # init app
 app = FastAPI()
 
-models.Base.metadata.create_all(bind=engine)
+# No need for this anymore since we are using Alembic
+# models.Base.metadata.create_all(bind=engine)
 
 # add routers
 app.include_router(post.router)

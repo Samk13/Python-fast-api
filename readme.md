@@ -43,6 +43,9 @@ this will set the environment variable JWT to the value of the access_token
 you can set the variable in Environment left tab in Postman
 - you can also set URL variable and replace your URL with `{{url}}`
 
+## Setup Alembic:
+[Setup Alembic](https://youtu.be/0sOvCWFmrtA?t=38242)
+
 # Start the Server:
 
 ```zsh

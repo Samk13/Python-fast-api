@@ -31,4 +31,4 @@ app.include_router(vote.router)
 # test endpoint
 @app.get("/")
 def root():
-    return {"message": "THis Python API using fast API"}
+    return {"message": "Hello 🎉"}

@@ -46,6 +46,14 @@ you can set the variable in Environment left tab in Postman
 ## Setup Alembic:
 [Setup Alembic](https://youtu.be/0sOvCWFmrtA?t=38242)
 
+## run migration on heroku postgres db:
+If you are on windows machine:
+You should not use gitbas to run the commends, instead use powershell or cmd as follows:
+````bash
+heroku run "alembic upgrade head"
+```
+> Make sure after installing Heroku cli to close your terminal and restart VS code.
+
 # Start the Server:
 
 ```zsh

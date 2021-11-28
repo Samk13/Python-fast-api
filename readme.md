@@ -63,10 +63,16 @@ heroku run "alembic upgrade head"
 ---
 ### [Auto reboot app on restart](https://youtu.be/0sOvCWFmrtA?t=47042)
 ---
-### [Seetup Nginx](https://youtu.be/0sOvCWFmrtA?t=47088)
+### [Setup Nginx](https://youtu.be/0sOvCWFmrtA?t=47088)
 ---
 
-### [Seetup HTTPS](https://youtu.be/0sOvCWFmrtA?t=47445)
+### [Setup HTTPS](https://youtu.be/0sOvCWFmrtA?t=47445)
+---
+### [Setup SSL](https://youtu.be/0sOvCWFmrtA?t=47723)
+---
+### [Setup Firewall](https://youtu.be/0sOvCWFmrtA?t=48013)
+---
+### [Setup app using Docker](https://youtu.be/0sOvCWFmrtA?t=48380)
 ---
 
 # Start the Server:

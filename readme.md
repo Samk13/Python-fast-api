@@ -54,8 +54,18 @@ heroku run "alembic upgrade head"
 ```
 > Make sure after installing Heroku cli to close your terminal and restart VS code.
 
-# Start the Server:
 
+## Access postgres db from ssh:
+[setup postgres config to be accessed with ssh](https://youtu.be/0sOvCWFmrtA?t=44246)
+
+[Auto reboot app on restart setup service](https://youtu.be/0sOvCWFmrtA?t=46455)
+
+[Auto reboot app on restart](https://youtu.be/0sOvCWFmrtA?t=47042)
+
+[Seetup Nginx](https://youtu.be/0sOvCWFmrtA?t=47088)
+
+
+# Start the Server:
 ```zsh
 uvicorn app.main:app --reload
 ```

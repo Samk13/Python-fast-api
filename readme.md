@@ -74,8 +74,14 @@ heroku run "alembic upgrade head"
 ---
 ### [Setup app using Docker](https://youtu.be/0sOvCWFmrtA?t=48380)
 ---
+### [Setup Docker compose](https://youtu.be/0sOvCWFmrtA?t=49121)
+---
+### [Optimize Docker for production](https://youtu.be/0sOvCWFmrtA?t=50942)
+---
 
 # Start the Server:
 ```zsh
 uvicorn app.main:app --reload
 ```
+
+[my Horuku](https://sam-arbid-fastapi.herokuapp.com/docs)

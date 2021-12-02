@@ -84,4 +84,15 @@ heroku run "alembic upgrade head"
 uvicorn app.main:app --reload
 ```
 
+# run tests:
+```zsh
+pytest -v
+```
+
+flags:
+pytest --disable-warnings -> disable warnings
+pytest -v -> verbose
+pytest -s -> show output
+
+
 [my Horuku](https://sam-arbid-fastapi.herokuapp.com/docs)

@@ -31,4 +31,4 @@ app.include_router(vote.router)
 # test endpoint
 @app.get("/")
 def root():
-    return {"message": "Hello 🎉"}
+    return {"message": "Hello World during the coronavirus pandemic! 🎉"}

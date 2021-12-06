@@ -7,7 +7,7 @@ from . import models
 # init app
 app = FastAPI()
 
-# No need for this anymore since we are using Alembic
+# No need for this anymore since we are using Alembic that will build tables for us
 # models.Base.metadata.create_all(bind=engine)
 
 # add CORS

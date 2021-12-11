@@ -94,7 +94,7 @@ pytest --disable-warnings -> disable warnings
 pytest -v -> verbose
 pytest -s -> show output
 pytest -x -> exit on first failure
-
+pytest -v -rP -> Captured stdout calls like print statements
 
 
 [my Horuku](https://sam-arbid-fastapi.herokuapp.com/docs)

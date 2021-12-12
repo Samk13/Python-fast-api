@@ -58,11 +58,8 @@ def test_incorrect_login_user(client, email, password, status_code):
         },
     )
     assert res.status_code == status_code
-    if email is None:
+    if email is None or password is None:
         assert dict(res.json()).get("detail")[0].get("type") == "value_error.missing"
         assert dict(res.json()).get("detail")[0].get("msg") == "field required"
-    if password is None:
-        assert dict(res.json()).get("detail")[0].get("type") == "value_error.missing"
-        assert dict(res.json()).get("detail")[0].get("msg") == "field required"
-    if email is not None and password is not None:
+    else:
         assert res.json().get("detail") == "Invalid Credentials"

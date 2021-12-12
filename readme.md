@@ -78,16 +78,10 @@ heroku run "alembic upgrade head"
 ---
 ### [Optimize Docker for production](https://youtu.be/0sOvCWFmrtA?t=50942)
 ---
+### [Deal with authentication testing](https://youtu.be/0sOvCWFmrtA?t=59311)
+---
 
-# Start the Server:
-```zsh
-uvicorn app.main:app --reload
-```
 
-# run tests:
-```zsh
-pytest -v
-```
 
 flags:
 pytest --disable-warnings -> disable warnings
@@ -98,3 +92,15 @@ pytest -v -rP -> Captured stdout calls like print statements
 
 
 [my Horuku](https://sam-arbid-fastapi.herokuapp.com/docs)
+
+
+
+# Start the Server:
+```zsh
+uvicorn app.main:app --reload
+```
+
+# run tests:
+```zsh
+pytest -v -rP
+```

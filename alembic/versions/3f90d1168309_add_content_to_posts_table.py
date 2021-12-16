@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """add content to posts table
 
 Revision ID: 3f90d1168309

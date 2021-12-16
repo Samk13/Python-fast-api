@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """auto-generate vote
 
 Revision ID: 82c7a20a6956

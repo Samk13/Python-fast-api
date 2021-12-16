@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .database import Base
 from sqlalchemy import ForeignKey, Integer, Boolean, Column, String, func
 from sqlalchemy.orm import relationship

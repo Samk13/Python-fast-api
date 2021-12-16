@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """add foreign key to posts table
 
 Revision ID: 265d61ecbf99

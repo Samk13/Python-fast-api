@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pydantic import BaseSettings
 
 # It will validate the settings and will raise an error if the settings are not valid or missing

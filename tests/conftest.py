@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # You can define fixtures here all tests will have access to them automatically
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import sessionmaker

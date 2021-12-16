@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """create posts table
 
 Revision ID: ea8977276f3f

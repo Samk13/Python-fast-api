@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """auto generate phone number
 
 Revision ID: a25270136fd4

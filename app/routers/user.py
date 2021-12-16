@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from typing import List

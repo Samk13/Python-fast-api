@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 from . import schemas, database, models

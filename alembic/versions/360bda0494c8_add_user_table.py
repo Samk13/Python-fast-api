@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Add user table
 
 Revision ID: 360bda0494c8

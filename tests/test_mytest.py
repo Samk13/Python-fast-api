@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from app.calc import add, BankAccount, InsufficientFunds
 import pytest
 

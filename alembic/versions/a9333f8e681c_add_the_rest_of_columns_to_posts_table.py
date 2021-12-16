@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """add the rest of columns to posts table
 
 Revision ID: a9333f8e681c

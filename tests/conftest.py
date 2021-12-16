@@ -15,8 +15,7 @@ from app.oauth2 import create_access_token
 
 SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
-TestingSessionLocal = sessionmaker(
-    autocommit=False, autoflush=False, bind=engine)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # add scope="module" so the fixture is only executed once in the module
 # https://youtu.be/0sOvCWFmrtA?t=57683
@@ -58,6 +57,7 @@ def test_create_login_user(client):
     new_user["password"] = user_data["password"]
     return new_user
 
+
 # create fixture for authenticating user
 
 
@@ -75,24 +75,29 @@ def authorized_client(client, token):
     client.headers.update({"Authorization": f"Bearer {token}"})
     return client
 
+
 # create fixture for creating test posts
 
 
 @pytest.fixture
 def test_posts(test_create_login_user, session):
-    post_data = [{
-        "title": "Test title",
-        "content": "Test content",
-        "owner_id": test_create_login_user["id"]
-    }, {
-        "title": "Test title 2",
-        "content": "Test content 2",
-        "owner_id": test_create_login_user["id"]
-    }, {
-        "title": "Test title 3",
-        "content": "Test content 3",
-        "owner_id": test_create_login_user["id"]
-    }]
+    post_data = [
+        {
+            "title": "Test title",
+            "content": "Test content",
+            "owner_id": test_create_login_user["id"],
+        },
+        {
+            "title": "Test title 2",
+            "content": "Test content 2",
+            "owner_id": test_create_login_user["id"],
+        },
+        {
+            "title": "Test title 3",
+            "content": "Test content 3",
+            "owner_id": test_create_login_user["id"],
+        },
+    ]
 
     def create_post_model(post):
         return models.Post(**post)

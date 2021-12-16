@@ -20,10 +20,7 @@ def upgrade():
     op.add_column(
         "posts",
         sa.Column(
-            "published",
-            sa.Boolean,
-            nullable=False,
-            server_default=sa.text("True"),
+            "published", sa.Boolean, nullable=False, server_default=sa.text("True")
         ),
     )
     op.add_column(

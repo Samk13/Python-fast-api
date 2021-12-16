@@ -50,13 +50,7 @@ def test_login_user(client, test_create_login_user):
     ],
 )
 def test_incorrect_login_user(client, email, password, status_code):
-    res = client.post(
-        "/login",
-        data={
-            "username": email,
-            "password": password,
-        },
-    )
+    res = client.post("/login", data={"username": email, "password": password})
     assert res.status_code == status_code
     if email is None or password is None:
         assert dict(res.json()).get("detail")[0].get("type") == "value_error.missing"

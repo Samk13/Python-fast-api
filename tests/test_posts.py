@@ -59,12 +59,7 @@ def test_create_post(
     authorized_client, test_create_login_user, title, content, published
 ):
     res = authorized_client.post(
-        "/posts/",
-        json={
-            "title": title,
-            "content": content,
-            "published": published,
-        },
+        "/posts/", json={"title": title, "content": content, "published": published}
     )
     schemas.PostResponse(**res.json())
     assert res.status_code == 201

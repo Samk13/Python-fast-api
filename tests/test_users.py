@@ -18,7 +18,6 @@ def test_create_user(client):
     res = client.post(
         "/users/", json={"email": "test@test.se", "password": "test_password"}
     )
-    new_user = schemas.UserResponse(**res.json())
     assert res.status_code == 201
     assert res.json().get("email") == "test@test.se"
 

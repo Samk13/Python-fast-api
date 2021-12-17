@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from .database import Base
-from sqlalchemy import ForeignKey, Integer, Boolean, Column, String, func
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
+
+from .database import Base
 
 
 class Post(Base):

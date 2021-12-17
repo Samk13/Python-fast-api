@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import pytest
-from app import schemas
 from jose import jwt
+
+from app import schemas
 from app.config import settings
 
 #  should import session even though it's not called directly cuase client is dependent on it

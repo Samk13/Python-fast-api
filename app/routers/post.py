@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-from fastapi import Response, status, HTTPException, Depends, APIRouter
-from sqlalchemy.orm import Session
-from sqlalchemy import func
-from ..database import get_db
-from .. import models, schemas, oauth2
 from typing import List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from sqlalchemy import func
+from sqlalchemy.orm import Session
+
+from .. import models, oauth2, schemas
+from ..database import get_db
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 Post = schemas.Post

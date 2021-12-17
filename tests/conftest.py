@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # You can define fixtures here all tests will have access to them automatically
-from fastapi.testclient import TestClient
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
-from app.main import app
 import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 from app import models
 from app.config import settings
-from app.database import get_db
-from app.database import Base
+from app.database import Base, get_db
+from app.main import app
 from app.oauth2 import create_access_token
 
 # Setup  test db for test

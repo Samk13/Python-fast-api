@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import post, user, auth, vote
-from .database import engine
+
 from . import models
+from .database import engine
+from .routers import auth, post, user, vote
 
 # init app
 app = FastAPI()

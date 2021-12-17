@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from app.calc import add, BankAccount, InsufficientFunds
 import pytest
+
+from app.calc import BankAccount, InsufficientFunds, add
 
 
 @pytest.mark.parametrize("a,b,expected", [(1, 2, 3), (2, 3, 5), (-3, -4, -7)])

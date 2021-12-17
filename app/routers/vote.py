@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from fastapi import status, HTTPException, Depends, APIRouter
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from .. import models, schemas, oauth2, database
+
+from .. import database, models, oauth2, schemas
 
 router = APIRouter(prefix="/vote", tags=["Vote"])
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
+
 from app import schemas
 
 
